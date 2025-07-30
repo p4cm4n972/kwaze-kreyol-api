@@ -105,6 +105,7 @@ export class AuthService {
                 {
                     pseudo: user.pseudo,
                     id: user._id,
+                    profilePicture: user.profilePicture,
                     // role: user.role,
                     // permissions: user.permissions,
                 },

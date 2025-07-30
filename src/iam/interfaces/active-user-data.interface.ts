@@ -5,6 +5,7 @@ export interface ActiveUserData {
     sub: number;
     pseudo: string;
     id: any;
+    profilePicture: string;
    // role: Role;
     // permissions: PermissionType[];
 }

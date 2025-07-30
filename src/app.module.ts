@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { IamModule } from './iam/iam.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
+import { WordSearchSessionModule } from './word-search-session/word-search-session.module';
+import { WordBrokenSessionModule } from './word-broken-session/word-broken-session.module';
+import { MotModule } from './mot/mot.module';
 
 @Module({
   imports: [
@@ -53,6 +56,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
   }),
    UsersModule,
    IamModule,
+   WordSearchSessionModule,
+   WordBrokenSessionModule,
+   MotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
