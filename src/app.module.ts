@@ -5,8 +5,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { IamModule } from './iam/iam.module';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
 import { WordSearchSessionModule } from './word-search-session/word-search-session.module';
 import { WordBrokenSessionModule } from './word-broken-session/word-broken-session.module';
 import { MotModule } from './mot/mot.module';
@@ -29,31 +27,6 @@ import { MotModule } from './mot/mot.module';
             },
     }
     ),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        transport: {
-          host: config.get('MAIL_HOST'),
-          port: config.get<number>('MAIL_PORT'),
-          secure: false,
-          auth: {
-            user: config.get('MAIL_USER'),
-            pass: config.get('MAIL_PASSWORD'),
-          },
-        },
-        defaults: {
-          from: config.get('MAIL_FROM'),
-        },
-  template: {
-    dir: __dirname + '/templates', // dossier des templates si tu veux
-    adapter: new HandlebarsAdapter(),
-    options: {
-      strict: true,
-    },
-      },
-    }),
-  }),
    UsersModule,
    IamModule,
    WordSearchSessionModule,

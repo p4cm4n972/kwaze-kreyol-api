@@ -1,21 +1,34 @@
 // mail.service.ts
 
 import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  private transporter: nodemailer.Transporter;
+
+  constructor(private configService: ConfigService) {
+    this.transporter = nodemailer.createTransporter({
+      host: this.configService.get('MAIL_HOST'),
+      port: this.configService.get<number>('MAIL_PORT'),
+      secure: false,
+      auth: {
+        user: this.configService.get('MAIL_USER'),
+        pass: this.configService.get('MAIL_PASSWORD'),
+      },
+    });
+  }
 
   async sendConfirmationEmail(to: string, token: string) {
     const confirmUrl = `http://kwazé-kréyol.fr/confirm-email?token=${token}`;
 
-    await this.mailerService.sendMail({
+    await this.transporter.sendMail({
+      from: this.configService.get('MAIL_FROM'),
       to,
       subject: 'Confirmation de votre adresse e-mail',
       html: `<p>Merci de vous être inscrit !</p>
              <p>Cliquez ici pour confirmer votre e-mail : <a href="${confirmUrl}">${confirmUrl}</a></p>`,
-       // template: 'email-verification.html'
     });
   }
 
@@ -24,7 +37,8 @@ export class MailService {
 
     const resetLink = `https://kwazé-kréyol.fr/reset-password?token=${token}`;
 
-    await this.mailerService.sendMail({
+    await this.transporter.sendMail({
+        from: this.configService.get('MAIL_FROM'),
         to: user.email,
         subject: 'Réinitialisation de votre mot de passe',
         html: `
